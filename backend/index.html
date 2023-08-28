@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-Buddy</title>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="style.css">
+
+
+</head>
+
+<body>
+
+    <!-- <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+    </form> -->
+    <nav>
+        <img src="logo-svg.svg" alt="" srcset="">
+    </nav>
+
+
+    <div class="chat-container">
+        <div class="texting-container">
+
+            <!-- <div class="text sender"></div>
+            <div class="text receiver"></div> -->
+        </div>
+
+        <div class="input-box">
+            <form action="" id="input-form">
+                <input type="text" name="message" id="message" placeholder="Type message here...">
+                <button class="btn" type="submit"><i class="fa-solid fa-paper-plane fa-xl"></i></button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const username = prompt('Enter your name:');
+            const socket = io();
+            socket.emit('set username', username);
+
+            socket.on('user joined', (username) => {
+                const li = document.createElement('li');
+                li.textContent = `${username} joined!`;
+                li.style.fontWeight = 'bold';
+                li.style.textAlign = 'center';
+                li.style.color = 'darkgreen';
+                li.style.textDecoration = 'underline';
+                document.querySelector('.texting-container').appendChild(li);
+            });
+
+            socket.on('user left', (username) => {
+                const li = document.createElement('li');
+                li.textContent = `${username} left the chat`;
+                li.style.fontWeight = 'bold';
+                li.style.textAlign = 'center';
+                li.style.color = 'red'; // Optionally, you can change the color
+                document.querySelector('.texting-container').appendChild(li);
+            });
+
+
+            document.getElementById('input-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                socket.emit('chat message', document.getElementById('message').value);
+                document.getElementById('message').value = '';
+                return false;
+            });
+
+
+            socket.on('chat message', (msg) => {
+                const div = document.createElement('div');
+                div.className = "text sender";
+                div.textContent = msg;
+                document.querySelector('.texting-container').appendChild(div);
+            });
+        });
+
+
+    </script>
+</body>
+
+</html>
